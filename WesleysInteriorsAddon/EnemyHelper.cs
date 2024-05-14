@@ -8,11 +8,23 @@ internal class EnemyHelper
 {
     public static void SpawnNutcrackerOnServer(Vector3 position, float yRot)
     {
+        if (!Plugin.IsHostOrServer)
+        {
+            Plugin.logger.LogError("[EnemyHelper] Only the host can spawn enemies.");
+            return;
+        }
+
         SpawnEnemyOnServer("Nutcracker", position, yRot);
     }
 
     public static void SpawnEnemyOnServer(string enemyName, Vector3 position, float yRot)
     {
+        if (!Plugin.IsHostOrServer)
+        {
+            Plugin.logger.LogError("[EnemyHelper] Only the host can spawn enemies.");
+            return;
+        }
+
         EnemyType enemyType = GetEnemyType(enemyName);
 
         if (enemyType == null)
@@ -28,9 +40,7 @@ internal class EnemyHelper
 
     public static EnemyType GetEnemyType(string enemyName)
     {
-        List<EnemyType> enemyTypes = GetAllEnemyTypes();
-
-        foreach (var enemyType in enemyTypes)
+        foreach (var enemyType in GetAllEnemyTypes())
         {
             if (enemyType.enemyName == enemyName)
             {

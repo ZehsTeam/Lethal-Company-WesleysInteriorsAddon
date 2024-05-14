@@ -19,13 +19,11 @@ internal class InteriorHelper
             if (extendedDungeonFlow == null) return false;
 
             dungeonName = extendedDungeonFlow.DungeonName;
-
             return true;
         }
         catch
         {
             Plugin.logger.LogError("[InteriorHelper] Failed to get dungeon name.");
-
             return false;
         }
     }

@@ -54,7 +54,7 @@ internal class ConfigManager
         );
         ToystoreNutcrackerMinActivateTimeCfg = configFile.Bind(
             new ConfigDefinition("Toystore Settings", "ToystoreNutcrackerMinActivateTime"),
-            10f,
+            7.5f,
             new ConfigDescription("The minimum amount of time in seconds between Nutcracker activation. (After pulling the apparatus)")
         );
         ToystoreNutcrackerMaxActivateTimeCfg = configFile.Bind(

@@ -1,5 +1,5 @@
 # WesleysInteriorsAddon
-**This is an addon mod for WesleysInteriors. Adds a few new features.**
+**This is an addon mod for [WesleysInteriors](https://thunderstore.io/c/lethal-company/p/Magic_Wesley/WesleysInteriors/). Adds a few new features.**
 
 ## <img src="https://i.imgur.com/TpnrFSH.png" width="20px"> Download
 

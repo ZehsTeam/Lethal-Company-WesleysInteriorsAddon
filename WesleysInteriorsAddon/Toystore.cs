@@ -96,11 +96,6 @@ internal class Toystore
             return;
         }
 
-        HideNutcrackerStatueOnLocalClient(nutcrackerObject);
-    }
-
-    public static void HideNutcrackerStatueOnLocalClient(GameObject nutcrackerObject)
-    {
         nutcrackerObject.SetActive(false);
     }
 
