@@ -10,7 +10,6 @@ namespace com.github.zehsteam.WesleysInteriorsAddon;
 
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 [BepInDependency(LethalLevelLoader.Plugin.ModGUID, BepInDependency.DependencyFlags.HardDependency)]
-[BepInDependency("ToystoreInterior", BepInDependency.DependencyFlags.HardDependency)]
 internal class Plugin : BaseUnityPlugin
 {
     private readonly Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);

@@ -23,6 +23,8 @@ internal class Toystore
 
     public static void FindNutcrackerStatues()
     {
+        if (!InteriorHelper.IsToystoreInterior()) return;
+
         nutcrackerObjects = GetNutcrackerStatues();
 
         Plugin.logger.LogInfo($"[Toystore] Found {nutcrackerObjects.Count} Nutcracker statues.");

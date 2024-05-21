@@ -30,6 +30,18 @@ internal class InteriorHelper
 
     public static bool IsToystoreInterior()
     {
-        return GetDungeonName() == "ToystoreFlow";
+        string dungeonName = GetDungeonName();
+
+        if (dungeonName.Equals("ToystoreFlow", System.StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        if (dungeonName.Equals("Toy Store", System.StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        return false;
     }
 }
