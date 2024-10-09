@@ -5,33 +5,33 @@ using UnityEngine;
 namespace com.github.zehsteam.WesleysInteriorsAddon.Patches;
 
 [HarmonyPatch(typeof(StartOfRound))]
-internal class StartOfRoundPatch
+internal static class StartOfRoundPatch
 {
-    [HarmonyPatch("Awake")]
+    [HarmonyPatch(nameof(StartOfRound.Awake))]
     [HarmonyPostfix]
-    static void AwakePatch()
+    private static void AwakePatch()
     {
         SpawnNetworkHandler();
     }
 
     private static void SpawnNetworkHandler()
     {
-        if (!Plugin.IsHostOrServer) return;
+        if (!NetworkUtils.IsServer) return;
 
-        var networkHandlerHost = Object.Instantiate(Content.networkHandlerPrefab, Vector3.zero, Quaternion.identity);
+        var networkHandlerHost = Object.Instantiate(Content.NetworkHandlerPrefab, Vector3.zero, Quaternion.identity);
         networkHandlerHost.GetComponent<NetworkObject>().Spawn();
     }
 
-    [HarmonyPatch("OnLocalDisconnect")]
+    [HarmonyPatch(nameof(StartOfRound.OnLocalDisconnect))]
     [HarmonyPrefix]
-    static void OnLocalDisconnectPatch()
+    private static void OnLocalDisconnectPatch()
     {
         Plugin.Instance.OnLocalDisconnect();
     }
 
-    [HarmonyPatch("ShipHasLeft")]
+    [HarmonyPatch(nameof(StartOfRound.ShipHasLeft))]
     [HarmonyPostfix]
-    static void ShipHasLeftPatch()
+    private static void ShipHasLeftPatch()
     {
         Plugin.Instance.OnShipHasLeft();
     }

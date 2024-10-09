@@ -5,6 +5,6 @@
 
 Download [WesleysInteriorsAddon](https://thunderstore.io/c/lethal-company/p/Zehs/WesleysInteriorsAddon/) on Thunderstore.
 
-## Toystore
+## Toy Store
 ### Features
 * Nutcracker statues will now slowly come alive after the apparatus has been pulled.

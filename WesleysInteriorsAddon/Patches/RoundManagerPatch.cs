@@ -3,12 +3,12 @@
 namespace com.github.zehsteam.WesleysInteriorsAddon.Patches;
 
 [HarmonyPatch(typeof(RoundManager))]
-internal class RoundManagerPatch
+internal static class RoundManagerPatch
 {
-    [HarmonyPatch("FinishGeneratingLevel")]
+    [HarmonyPatch(nameof(RoundManager.FinishGeneratingLevel))]
     [HarmonyPostfix]
     [HarmonyPriority(Priority.LowerThanNormal)]
-    static void FinishGeneratingLevelPatch()
+    private static void FinishGeneratingLevelPatch()
     {
         Plugin.Instance.OnFinishGeneratingLevel();
     }

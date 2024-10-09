@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace com.github.zehsteam.WesleysInteriorsAddon;
 
-internal class EnemyHelper
+internal static class EnemyHelper
 {
     public static void SpawnNutcrackerOnServer(Vector3 position, float yRot)
     {
-        if (!Plugin.IsHostOrServer)
+        if (!NetworkUtils.IsServer)
         {
-            Plugin.logger.LogError("[EnemyHelper] Only the host can spawn enemies.");
+            Plugin.logger.LogError("Only the host can spawn enemies.");
             return;
         }
 
@@ -19,9 +19,9 @@ internal class EnemyHelper
 
     public static void SpawnEnemyOnServer(string enemyName, Vector3 position, float yRot)
     {
-        if (!Plugin.IsHostOrServer)
+        if (!NetworkUtils.IsServer)
         {
-            Plugin.logger.LogError("[EnemyHelper] Only the host can spawn enemies.");
+            Plugin.logger.LogError("Only the host can spawn enemies.");
             return;
         }
 
@@ -29,18 +29,18 @@ internal class EnemyHelper
 
         if (enemyType == null)
         {
-            Plugin.logger.LogError($"[EnemyHelper] Failed to find EnemyType \"{enemyName}\".");
+            Plugin.logger.LogError($"Failed to find EnemyType \"{enemyName}\".");
             return;
         }
 
         RoundManager.Instance.SpawnEnemyGameObject(position, yRot, -1, enemyType);
 
-        Plugin.Instance.LogInfoExtended($"[EnemyHelper] Spawned \"{enemyType.enemyName}\" at position: ({position.x}, {position.y}, {position.z}), yRot: {yRot}");
+        Plugin.Instance.LogInfoExtended($"Spawned \"{enemyType.enemyName}\" at position: ({position.x}, {position.y}, {position.z}), yRot: {yRot}");
     }
 
     public static EnemyType GetEnemyType(string enemyName)
     {
-        foreach (var enemyType in GetAllEnemyTypes())
+        foreach (var enemyType in GetEnemyTypes())
         {
             if (enemyType.enemyName == enemyName)
             {
@@ -48,22 +48,63 @@ internal class EnemyHelper
             }
         }
 
+        try
+        {
+            EnemyType enemyType = Resources.FindObjectsOfTypeAll<EnemyType>().Single((EnemyType x) => x.enemyName == enemyName);
+
+            if (IsValidEnemyType(enemyType) && NetworkUtils.IsNetworkPrefab(enemyType.enemyPrefab))
+            {
+                Plugin.Instance.LogInfoExtended($"Found EnemyType \"{enemyType.enemyName}\" from Resources.");
+
+                return enemyType;
+            }
+        }
+        catch { }
+
         return null;
     }
 
-    private static List<EnemyType> GetAllEnemyTypes()
+    public static List<EnemyType> GetEnemyTypes()
     {
-        List<EnemyType> enemyTypes = [];
+        var enemyTypes = new HashSet<EnemyType>(new EnemyTypeComparer());
 
         foreach (var level in StartOfRound.Instance.levels)
         {
-            enemyTypes.AddRange(level.Enemies.Select(_ => _.enemyType));
-            enemyTypes.AddRange(level.DaytimeEnemies.Select(_ => _.enemyType));
-            enemyTypes.AddRange(level.OutsideEnemies.Select(_ => _.enemyType));
+            var levelEnemyTypes = level.Enemies
+                .Concat(level.DaytimeEnemies)
+                .Concat(level.OutsideEnemies)
+                .Select(e => e.enemyType)
+                .Where(IsValidEnemyType);
+
+            foreach (var levelEnemyType in levelEnemyTypes)
+            {
+                enemyTypes.Add(levelEnemyType);
+            }
         }
 
-        enemyTypes = enemyTypes.Distinct().ToList();
+        return enemyTypes.ToList();
+    }
 
-        return enemyTypes;
+    public static bool IsValidEnemyType(EnemyType enemyType)
+    {
+        if (enemyType == null) return false;
+        if (string.IsNullOrWhiteSpace(enemyType.enemyName)) return false;
+        if (enemyType.enemyPrefab == null) return false;
+
+        return true;
+    }
+}
+
+public class EnemyTypeComparer : IEqualityComparer<EnemyType>
+{
+    public bool Equals(EnemyType x, EnemyType y)
+    {
+        if (x == null || y == null) return false;
+        return x.enemyName == y.enemyName;
+    }
+
+    public int GetHashCode(EnemyType obj)
+    {
+        return obj.enemyName?.GetHashCode() ?? 0;
     }
 }

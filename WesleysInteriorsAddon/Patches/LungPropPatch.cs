@@ -3,14 +3,14 @@
 namespace com.github.zehsteam.WesleysInteriorsAddon.Patches;
 
 [HarmonyPatch(typeof(LungProp))]
-internal class LungPropPatch
+internal static class LungPropPatch
 {
-    [HarmonyPatch("EquipItem")]
+    [HarmonyPatch(nameof(LungProp.EquipItem))]
     [HarmonyPrefix]
-    static void EquipItemPatch(ref LungProp __instance)
+    private static void EquipItemPatch(ref LungProp __instance)
     {
         if (!__instance.isLungDocked) return;
 
-        Toystore.OnApparatusRemoved();
+        Plugin.Instance.OnApparatusRemoved();
     }
 }

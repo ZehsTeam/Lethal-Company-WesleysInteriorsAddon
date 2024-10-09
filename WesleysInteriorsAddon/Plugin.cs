@@ -1,15 +1,16 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
+using com.github.zehsteam.WesleysInteriorsAddon.Dependencies;
 using com.github.zehsteam.WesleysInteriorsAddon.Patches;
 using HarmonyLib;
 using System.Reflection;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace com.github.zehsteam.WesleysInteriorsAddon;
 
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 [BepInDependency(LethalLevelLoader.Plugin.ModGUID, BepInDependency.DependencyFlags.HardDependency)]
+[BepInDependency(LethalConfigProxy.PLUGIN_GUID, BepInDependency.DependencyFlags.SoftDependency)]
 internal class Plugin : BaseUnityPlugin
 {
     private readonly Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
@@ -19,9 +20,7 @@ internal class Plugin : BaseUnityPlugin
 
     internal static ConfigManager ConfigManager;
 
-    public static bool IsHostOrServer => NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer;
-
-    void Awake()
+    private void Awake()
     {
         if (Instance == null) Instance = this;
 
@@ -61,22 +60,29 @@ internal class Plugin : BaseUnityPlugin
 
     public void OnLocalDisconnect()
     {
-        Toystore.Reset();
+        ToyStore.Reset();
     }
 
     public void OnFinishGeneratingLevel()
     {
-        Toystore.FindNutcrackerStatues();
+        ToyStore.FindNutcrackerStatues();
     }
 
     public void OnShipHasLeft()
     {
-        Toystore.Reset();
+        ToyStore.Reset();
+    }
+
+    public void OnApparatusRemoved()
+    {
+        logger.LogInfo("Apparatus was pulled.");
+
+        ToyStore.OnApparatusRemoved();
     }
 
     public void LogInfoExtended(object data)
     {
-        if (ConfigManager.ExtendedLogging)
+        if (ConfigManager.ExtendedLogging.Value)
         {
             logger.LogInfo(data);
         }

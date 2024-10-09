@@ -2,7 +2,7 @@
 
 namespace com.github.zehsteam.WesleysInteriorsAddon;
 
-internal class InteriorHelper
+internal static class InteriorHelper
 {
     public static string GetDungeonName()
     {
@@ -23,12 +23,12 @@ internal class InteriorHelper
         }
         catch
         {
-            Plugin.logger.LogError("[InteriorHelper] Failed to get dungeon name.");
+            Plugin.logger.LogError("Failed to get dungeon name.");
             return false;
         }
     }
 
-    public static bool IsToystoreInterior()
+    public static bool IsToyStoreInterior()
     {
         string dungeonName = GetDungeonName();
 

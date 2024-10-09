@@ -7,8 +7,8 @@
 
     <AssemblyName>com.github.zehsteam.$(MSBuildProjectName)</AssemblyName> <!-- PLUGIN_GUID -->
     <Product>$(MSBuildProjectName)</Product>                               <!-- PLUGIN_NAME -->
-    <Version>1.0.1</Version>                                               <!-- PLUGIN_VERSION -->
-    <Description></Description>
+    <Version>1.1.0</Version>                                               <!-- PLUGIN_VERSION -->
+    <Description>This is an addon mod for WesleysInteriors. Adds a few new features</Description>
 
     <RootNamespace>com.github.zehsteam.$(MSBuildProjectName)</RootNamespace>
 
@@ -36,19 +36,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.2" PrivateAssets="all" />
     <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
-    <PackageReference Include="BepInEx.Core" Version="5.4.*" />
+    <PackageReference Include="BepInEx.Core" Version="5.*" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="UnityEngine.Modules" Version="2023.2.4" IncludeAssets="compile" />
+    <PackageReference Include="IAmBatby.LethalLevelLoader" Version="1.3.10" />
+    <PackageReference Include="UnityEngine.Modules" Version="2022.3.9" IncludeAssets="compile" PrivateAssets="all" />
+    <PackageReference Include="LethalCompany.GameLibs.Steam" Version="64.0.0-ngd.0" PrivateAssets="all" />
   </ItemGroup>
   
   <PropertyGroup>
-		<AssembliesPath>D:\SteamLibrary\steamapps\common\Lethal Company\Lethal Company_Data\Managed</AssembliesPath>
-    <BepInTools>D:\SteamLibrary\steamapps\common\Lethal Company\BepInEx\core</BepInTools>
+    <LibraryFolder>D:\Documents\Lethal Company Modding\Mods</LibraryFolder>
     <PluginsFolder>D:\SteamLibrary\steamapps\common\Lethal Company\BepInEx\plugins</PluginsFolder>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <GenerateDocumentationFile>False</GenerateDocumentationFile>
 	</PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -61,28 +61,15 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<Reference Include="0Harmony">                      <HintPath>$(BepInTools)\0Harmony.dll</HintPath>                          </Reference>
-		<Reference Include="BepInEx">                       <HintPath>$(BepInTools)\BepInEx.dll</HintPath>                           </Reference>
-		<Reference Include="Mono.Cecil">                    <HintPath>$(BepInTools)\Mono.Cecil.dll</HintPath>                        </Reference>
-		<Reference Include="Mono.Cecil.Rocks">              <HintPath>$(BepInTools)\Mono.Cecil.Rocks.dll</HintPath>                  </Reference>
-		<Reference Include="MonoMod.RuntimeDetour">         <HintPath>$(BepInTools)\MonoMod.RuntimeDetour.dll</HintPath>             </Reference>
-		<Reference Include="MonoMod.Utils">                 <HintPath>$(BepInTools)\MonoMod.Utils.dll</HintPath>                     </Reference>
-		
-    <Reference Include="Assembly-CSharp">               <HintPath>$(AssembliesPath)\Assembly-CSharp.dll</HintPath>               </Reference>
-		<Reference Include="Assembly-CSharp-firstpass">     <HintPath>$(AssembliesPath)\Assembly-CSharp-firstpass.dll</HintPath>     </Reference>
-		<Reference Include="DissonanceVoip">                <HintPath>$(AssembliesPath)\DissonanceVoip.dll</HintPath>                </Reference>
-		<Reference Include="Facepunch.Steamworks.Win64">    <HintPath>$(AssembliesPath)\Facepunch.Steamworks.Win64.dll</HintPath>    </Reference>
-		<Reference Include="Unity.Netcode.Runtime">         <HintPath>$(AssembliesPath)\Unity.Netcode.Runtime.dll</HintPath>         </Reference>
-    
-		<Reference Include="LethalLevelLoader">             <HintPath>$(PluginsFolder)\IAmBatby-LethalLevelLoader-1.2.2\LethalLevelLoader.dll</HintPath></Reference>
-	</ItemGroup>
-
-	<ItemGroup>
 	  <None Update="packages.config">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="LethalConfig"><HintPath>$(LibraryFolder)\AinaVT-LethalConfig\LethalConfig.dll</HintPath></Reference>
+  </ItemGroup>
+  
   <Target Name="NetcodePatch" AfterTargets="PostBuildEvent">
     <Exec Command="netcode-patch &quot;$(TargetPath)&quot; @(ReferencePathWithRefAssemblies->'&quot;%(Identity)&quot;', ' ')" />
   </Target>

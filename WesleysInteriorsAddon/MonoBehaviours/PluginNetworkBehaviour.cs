@@ -15,8 +15,8 @@ internal class PluginNetworkBehaviour : NetworkBehaviour
     [ClientRpc]
     public void HideNutcrackerStatueClientRpc(Vector3 position)
     {
-        if (Plugin.IsHostOrServer) return;
+        if (NetworkUtils.IsServer) return;
 
-        Toystore.HideNutcrackerStatueOnLocalClient(position);
+        ToyStore.HideNutcrackerStatueOnLocalClient(position);
     }
 }
